@@ -13,60 +13,42 @@ public class Solution2 {
         System.out.println(count);
     }
 
-    public static Integer lengthOfLongestSubstring(String s){
-        char[] a = s.toCharArray();
-        List<Character> list = new ArrayList<>();
-        if(a.length==0){
-            return 0;
-        }else{
-            int num=1;
-            for (int j=0;j<a.length;j++) {
-                for(int i=j;i<a.length;i++) {
-                    if(!list.contains(a[i])) list.add(a[i]);
-                    else {
-                        if(list.size()>=num)  {
-                            num=list.size();
-                        }
-                        list.clear();
-                        break;
+    public static int lengthOfLongestSubstring(String s) {
+        //如果s为空，length不大于0，是一个空串，就没有向下执行的必要了
+        if (s != null && s.length() > 0 && s != "") {
+            //String -> char[]
+            char[] strChar = s.toCharArray();
+            // 存储最长字串 key:char值，value:index下标
+            ArrayList<String> maxStr = new ArrayList<>();
+            //临时的字串存储空间
+            ArrayList<String> tempStr = new ArrayList<>();
+            //循环
+            for (int i = 0; i < strChar.length; i++) {
+                //char -> String
+                String str = new String(new char[]{strChar[i]});
+                //判断str是否存在于tempStr中
+                if (tempStr.contains(str)) {
+                    //先判断tempStr的长度是否大于等于maxStr的长度,大于，才能将最长字串覆盖
+                    if (tempStr.size() > maxStr.size()) {
+                        maxStr = new ArrayList<>(tempStr);
+                    }
+                    //存储重复字符
+                    int reIndex = tempStr.indexOf(str);
+                    // 删除tempStr中的重复字节及其之前的字符
+                    for (int j = 0; j <= reIndex; j++) {
+                        tempStr.remove(0);
                     }
                 }
+                //将当前字符存入tempStr中
+                tempStr.add(str);
             }
-            return num;
+            //最终判断
+            if (tempStr.size() > maxStr.size()) {
+                maxStr = tempStr;
+            }
+            //返回最长字串的长度
+            return maxStr.size();
         }
-
+        return 0;
     }
-
-//    public static Integer lengthOfLongestSubstring(String s) {
-//        ArrayList<Character> list = new ArrayList<>();
-//        int count = 0;
-//        int max = 0;
-//        for (int i = 0; i < s.length(); i++) {
-//            if (!list.contains(s.charAt(i))) {
-//                list.add(s.charAt(i));
-//            }
-//            else {
-//                list = new ArrayList<>();
-//                list.add(s.charAt(i));
-//            }
-//            if (list.size() > max) {
-//                max = list.size();
-//            }
-//        }
-//        list = new ArrayList<>();
-//        for (int i = (s.length() - 1); i >= 0; i--) {
-//
-//            if (!list.contains(s.charAt(i))) {
-//                list.add(s.charAt(i));
-//            }
-//            else {
-//                list = new ArrayList<>();
-//                list.add(s.charAt(i));
-//            }
-//            if (list.size() > max) {
-//                max = list.size();
-//            }
-//        }
-//        return max;
-//    }
 }
