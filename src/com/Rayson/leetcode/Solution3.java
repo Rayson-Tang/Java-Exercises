@@ -1,31 +1,33 @@
 package com.Rayson.leetcode;
 
-import java.util.ArrayList;
+class Solution3 {
 
-public class Solution3 {
     public static void main(String[] args) {
-
+        Solution3 solution3 = new Solution3();
+        String max = solution3.longestPalindrome("cbbd");
+        System.out.println(max);
     }
 
-    public static double findMedianSortedArrays(int[] nums1, int[] nums2) {
-        ArrayList<Integer> list = new ArrayList<>();
-        for (int i = 0; i < nums1.length; i++) {
-            list.add(nums1[i]);
-        }
-        for (int i = 0; i < nums2.length; i++) {
-            list.add(nums2[i]);
-        }
-        while (list.size() > 2) {
-            int max = 0, min = 0;
-            for (int i = 0; i < list.size(); i++) {
-                if (max < list.get(i)) {
-                    max = list.get(i);
-                }
-                if (min > list.get(i)) {
-                    min = list.get(i);
-                }
+    public static String longestPalindrome(String s) {
+
+        String max = "";
+        for (int i = 0; i < s.length(); i++) {
+            char c = s.charAt(i);
+           max = find(s, i - 1, i + 1,max);
+            if (i != 0 && c == s.charAt(i - 1)) { // 第一个字符不作为双轴右部
+               max = find(s, i - 2, i + 1,max);
             }
-            list.remove(max);
         }
+
+        return max;
+    }
+
+    private static String find(String s, int i, int j,String max) {
+        for (; i >= 0 && j < s.length() && s.charAt(i) == s.charAt(j); i--, j++)
+            ;
+        if (j - i - 1 > max.length()) {
+            max = s.substring(i + 1, j);
+        }
+        return max;
     }
 }
