@@ -1,5 +1,7 @@
 package com.Rayson.leetcode;
 
+//Z字变化
+
 public class Solution4 {
     public static void main(String[] args) {
         String str = "PAYPALISHIRING";
