@@ -1,2 +1,2 @@
 # Java-Exexcises
-Java基础练习
+Java算法练习
