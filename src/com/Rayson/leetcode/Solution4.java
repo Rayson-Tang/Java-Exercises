@@ -22,7 +22,7 @@ public class Solution4 {
             list.add(new StringBuffer());
         }
         int cur = 0;
-        boolean flag = true;
+        boolean flag = false;
         for (char c : s.toCharArray()) {
             list.get(cur).append(c);
             if (cur == 0 || cur == numRows-1){
