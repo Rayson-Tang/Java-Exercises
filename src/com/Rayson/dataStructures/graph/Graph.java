@@ -2,6 +2,7 @@ package com.Rayson.dataStructures.graph;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 
 public class Graph {
     private ArrayList<String> vertexList;//存储质点集合
@@ -12,19 +13,22 @@ public class Graph {
 
     public static void main(String[] args) {
         int n = 5;
-        String[] val = {"A","B","C","D","E"};
+        String[] val = {"A", "B", "C", "D", "E"};
         Graph graph = new Graph(5);
         for (int i = 0; i < val.length; i++) {
             graph.insertVertex(val[i]);
         }
-        graph.insertEdge(0,1,1);
-        graph.insertEdge(0,2,1);
-        graph.insertEdge(1,2,1);
-        graph.insertEdge(1,3,1);
-        graph.insertEdge(1,4,1);
+        graph.insertEdge(0, 1, 1);
+        graph.insertEdge(0, 2, 1);
+        graph.insertEdge(1, 2, 1);
+        graph.insertEdge(1, 3, 1);
+        graph.insertEdge(1, 4, 1);
         //graph.getGraph();
 
-       graph.dfs();
+        //System.out.println("深度优先");
+        //graph.dfs();
+        System.out.println("广度优先");
+        graph.bfs();
     }
 
     public Graph(int n) {
@@ -35,48 +39,48 @@ public class Graph {
     }
 
     //插入节点
-    public void insertVertex(String vertex){
+    public void insertVertex(String vertex) {
         vertexList.add(vertex);
     }
 
     //添加边
-    public void insertEdge(int v1, int v2, int weight){
+    public void insertEdge(int v1, int v2, int weight) {
         edges[v1][v2] = weight;
         edges[v2][v1] = weight;
         numOfEdges++;
     }
 
     //返回节点数目
-    public int getNumOfVertex(){
+    public int getNumOfVertex() {
         return vertexList.size();
     }
 
     //返回边数目
-    public int getNumOfEdges(){
+    public int getNumOfEdges() {
         return numOfEdges;
     }
 
     //返回节点下标对应的数据
-    public String getVertexByIndex(int i){
+    public String getVertexByIndex(int i) {
         return vertexList.get(i);
     }
 
     //返回v1，v2权值
-    public int getWeight(int v1, int v2){
+    public int getWeight(int v1, int v2) {
         return edges[v1][v2];
     }
 
     //显示图对应矩阵
-    public void getGraph(){
-        for (int[] link:edges){
+    public void getGraph() {
+        for (int[] link : edges) {
             System.out.println(Arrays.toString(link));
         }
     }
 
     //获取第一个临节点下标
-    public int getFirstNeighbor(int index){
+    public int getFirstNeighbor(int index) {
         for (int i = 0; i < vertexList.size(); i++) {
-            if (edges[index][i] > 0){
+            if (edges[index][i] > 0) {
                 return i;
             }
         }
@@ -84,9 +88,9 @@ public class Graph {
     }
 
     //根据前一个节点获取下一个节点
-    public int getNextNeighbor(int v1, int v2){
+    public int getNextNeighbor(int v1, int v2) {
         for (int i = v2 + 1; i < vertexList.size(); i++) {
-            if (edges[v1][i] > 0){
+            if (edges[v1][i] > 0) {
                 return i;
             }
         }
@@ -94,26 +98,63 @@ public class Graph {
     }
 
     //深度优先遍历
-    public void dfs(boolean[] isVisited, int i){
+    public void dfs(boolean[] isVisited, int i) {
         System.out.println(getVertexByIndex(i) + "->");
         //设置已访问
         isVisited[i] = true;
         //查找第一个临节点
         int w = getFirstNeighbor(i);
-        while (w != -1){
-            if (!isVisited[w]){
-                dfs(isVisited,w);
+        while (w != -1) {
+            if (!isVisited[w]) {
+                dfs(isVisited, w);
             }
             //如果w已被访问
-            w=getNextNeighbor(i,w);
+            w = getNextNeighbor(i, w);
         }
     }
 
     //重载
-    public void dfs(){
+    public void dfs() {
+        for (int i = 0; i < getNumOfVertex(); i++) {
+            if (!isVisited[i]) {
+                dfs(isVisited, i);
+            }
+        }
+    }
+
+    //对一个节点进行广度优先遍历
+    private void bfs(boolean[] isVisited, int i) {
+        int u;//头结点下标
+        int w;//邻接节点
+        //记录节点访问顺序的队列
+        LinkedList<Object> queue = new LinkedList<>();
+        //访问节点
+        System.out.println(getVertexByIndex(i));
+        //设置已访问
+        isVisited[i] = true;
+        queue.addLast(i);
+        while (!queue.isEmpty()) {
+            //取出头结点
+            u = (Integer) queue.removeFirst();
+            w = getFirstNeighbor(u);
+            while (w != -1) {
+                if (!isVisited[w]) {
+                    System.out.println(getVertexByIndex(w));
+                    isVisited[w] = true;
+                    queue.addLast(w);
+                }
+                else {
+                    w = getNextNeighbor(u, w);
+                }
+            }
+        }
+    }
+
+    //重载，对所有节点广度优先遍历
+    public void bfs(){
         for (int i = 0; i < getNumOfVertex(); i++) {
             if (!isVisited[i]){
-                dfs(isVisited,i);
+                bfs(isVisited,i);
             }
         }
     }
